@@ -1,5 +1,5 @@
 from typing import Optional, Tuple
-import datetime
+from datetime import datetime
 import argparse
 from dotenv import load_dotenv
 
