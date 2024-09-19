@@ -37,4 +37,4 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
       - name: Run
-        run: make run
+        run: python stripe_analytics_pipeline.py --dataset-name public full_load
