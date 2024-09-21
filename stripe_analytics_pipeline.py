@@ -74,10 +74,16 @@ def cli():
     )
     parser_full_load.add_argument("--start-date", type=str, help="Start date in YYYY-MM-DD format (Included)")
     parser_full_load.add_argument("--end-date", type=str, help="End date in YYYY-MM-DD format (Not included)")
-    parser_full_load.add_argument("--skip-incremental-endpoints", action="store_true",
-                                  help=f"Skip loading non-editable (incremental) endpoints: "
-                                       f"{', '.join(INCREMENTAL_ENDPOINTS)}. "
-                                       "Useful if you load these endpoints using 'incremental_load' option.")
+
+    # Create a mutually exclusive group for endpoint selection
+    group = parser_full_load.add_mutually_exclusive_group()
+    group.add_argument("--skip-incremental-endpoints", action="store_true",
+                       help=f"Skip loading non-editable (incremental) endpoints: "
+                            f"{', '.join(INCREMENTAL_ENDPOINTS)}. "
+                            "Useful if you load these endpoints using 'incremental_load' option.")
+    group.add_argument("--only-incremental-endpoints", action="store_true",
+                       help=f"Load only non-editable (incremental) endpoints: {', '.join(INCREMENTAL_ENDPOINTS)}. "
+                            "Useful for reloading incremental data without affecting other endpoints.")
 
     # Incremental Load Parser
     parser_incremental_load = subparsers.add_parser(
@@ -101,8 +107,12 @@ def cli():
         start_date = from_format(args.start_date, "YYYY-MM-DD").in_tz("UTC") if args.start_date else None
         end_date = from_format(args.end_date, "YYYY-MM-DD").in_tz("UTC") if args.end_date else None
         endpoints = ENDPOINTS
-        if not args.skip_incremental_endpoints:
+
+        if args.only_incremental_endpoints:
+            endpoints = INCREMENTAL_ENDPOINTS
+        elif not args.skip_incremental_endpoints:
             endpoints = endpoints + INCREMENTAL_ENDPOINTS
+
         full_load(endpoints=endpoints, start_date=start_date, end_date=end_date, dataset_name=args.dataset_name)
 
     elif args.pipeline_type == "incremental_load":
