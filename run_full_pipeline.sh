@@ -11,7 +11,7 @@ cd "$PROJECT_DIR"
 
 # Run the pipeline
 
-python stripe_analytics_pipeline.py --dataset-name public incremental_load
+python stripe_analytics_pipeline.py --dataset-name public full_load --skip-incremental-endpoints
 
 
 
