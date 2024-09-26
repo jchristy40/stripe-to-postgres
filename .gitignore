@@ -12,3 +12,4 @@ secrets.toml
 venv
 # ignore Pycharm
 .idea
+logs/
