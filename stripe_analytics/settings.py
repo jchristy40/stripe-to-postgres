@@ -9,6 +9,7 @@ ENDPOINTS = (
     "Customer",
     "Product",
     "Price",
+    "PromotionCode"
 )
 # possible incremental endpoints
 INCREMENTAL_ENDPOINTS = ("Invoice", "BalanceTransaction", "Refund", "Charge")
